@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
-import { IUser, IMiddleWare } from "../types";
+import { IUser } from "../types";
+import { NextFunction, Request, Response } from "express";
 
 export const createJWT = (user: IUser) => {
   if (process.env.JWT_SECRET) {
@@ -15,7 +16,7 @@ export const createJWT = (user: IUser) => {
   }
 };
 
-export const protect: IMiddleWare = (req, res, next) => {
+export const protect = (req: Request, res: Response, next: NextFunction) => {
   const bearer = req.headers.authorization;
 
   if (!bearer) {
@@ -48,7 +49,7 @@ export const protect: IMiddleWare = (req, res, next) => {
   }
 };
 
-export const comparePassword = (password: string | Buffer, hash: string) => {
+export const comparePasswords = (password: string | Buffer, hash: string) => {
   return bcrypt.compare(password, hash);
 };
 
